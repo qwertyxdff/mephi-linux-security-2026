@@ -1,0 +1,80 @@
+    1  sudo sh ./VboxLinuxAdditions.run
+    2  mkdir -p /mnt/vbox
+    3  mkdir /dev/sr0 /mnt/vbox
+    4  mount  /dev/sr0 /mnt/vbox
+    5  sh /mnt/vbox/VboxLinuxAdditions.run
+    6  ls -la /mnt/vbox
+    7  sh /mnt/vbox/VBoxLinuxAdditions.run
+    8  sh /mnt/vbox/VBoxLinuxAdditions.run
+    9  dnf install gcc make perl kernel-headers kernel-devel-$(uname -r)
+   10  dnf list --showduplicates kernel-devel
+   11  dnf install gcc make perl kernel-headers kernel-lt-devel-$(uname -r)
+   12  /sbin/rcvboxadd setup
+   13  reboot
+   14  userdel -r user1
+   15  loginctl terminate-user user1
+   16  userdel -r user1
+   17  groupdel students
+   18  rm -f /root/mephi-secret
+   19  rm -f /etc/sudoers.d/user1-time
+   20  rm -rI /root/mephi-linux-security-2026
+   21  rm -rI /root/mephi-linux-security-2026
+   22  id user1
+   23  getent group students
+   24  ls -ld /home/user1
+   25  ls -l /etc/sudoers.d/user1-time
+   26  ls -l /root/mephi-secret
+   27  clear
+   28  dnf install -y git sudo libcap procps-ng findutils
+   29  mkdir -p /root/mephi-linux-security-2026
+   30  export LAB=/root/mephi-linux-security-2026
+   31  ls -ld "$LAB"
+   32  groupadd students
+   33  getent group students
+   34  useradd -m -u 1234 -G students user1
+   35  id user1
+   36  passwd user1
+   37  chage -M 90 user1
+   38  chage -l user1
+   39  stat /home/user1
+   40  {   id user1;   chage -l user1; } > "$LAB/user-check.out"
+   41  id user1
+   42  chage -l user1
+   43  find / -type f -perm -4000 2>/dev/null > "$LAB/suid-files.out"
+   44  cat "$LAB/suid-files.out"
+   45  ps -eo pid,ruid,euid,comm | awk 'NR==1 || ($2>=1000 && $3==0)'
+   46  ps -eo pid,ruid,euid,comm | awk 'NR==1 || ($2>=1000 && $3==0)' > "$LAB/processes.out"
+   47  head -n 15 "$LAB/suid-files.out"
+   48  cat "$LAB/processes.out"
+   49  echo "MEPHI SECRET" > /home/user1/secret.txt
+   50  chown root:root /home/user1/secret.txt
+   51  chmod 600 /home/user1/secret.txt
+   52  su - user1 -c 'cat /home/user1/secret.txt'
+   53  mkdir -p /home/user1/mephi-tools
+   54  cp /usr/bin/cat /home/user1/mephi-tools/cat-suid
+   55  chown root:root /home/user1/mephi-tools/cat-suid
+   56  chmod 4755 /home/user1/mephi-tools/cat-suid
+   57  ls -l /home/user1/mephi-tools/cat-suid
+   58  su - user1 -c '/home/user1/mephi-tools/cat-suid /home/user1/secret.txt'
+   59  ls -l /home/user1/mephi-tools/cat-suid
+   60  su - user1 -c '/home/user1/mephi-tools/cat-suid /home/user1/secret.txt'
+   61  su - user1 -c 'touch /home/user1/cap-test.txt'
+   62  cp /usr/bin/chown /home/user1/mephi-tools/chown-cap
+   63  chown root:root /home/user1/mephi-tools/chown-cap
+   64  chmod 755 /home/user1/mephi-tools/chown-cap
+   65  setcap cap_chown=ep /home/user1/mephi-tools/chown-cap
+   66  getcap /home/user1/mephi-tools/chown-cap
+   67  su - user1 -c '/home/user1/mephi-tools/chown-cap root /home/user1/cap-test.txt'
+   68  getcap /home/user1/mephi-tools/chown-cap
+   69  stat /home/user1/cap-test.txt
+   70  visudo -f /etc/sudoers.d/user1-time
+   71  sudo -l -U user1
+   72  visudo -f /etc/sudoers.d/user1-time
+   73  timedatectl set-ntp false
+   74  su - user1
+   75  timedatectl set-ntp true
+   76  clear
+   77  echo "372733"
+   78  mkdir -p /root/mephi-linux-security-2026
+   79  export LAB=/root/mephi-linux-security-2026
+   80  history > "$LAB/history.out"
